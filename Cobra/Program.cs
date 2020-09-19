@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Cobra
 {
@@ -14,20 +15,8 @@ namespace Cobra
                 if (string.IsNullOrEmpty(line))
                     return;
 
-                var lexer = new Lexer(line);
-
-                while (true)
-                {
-                    var next = lexer.NextToken();
-
-                    if (next.Kind == SyntaxKind.EndOfFile)
-                        break;
-
-                    Console.WriteLine($"{next.Kind} => {next.Text}");
-
-                    if (next.Value != null)
-                        Console.WriteLine($"{next.Value}");
-                }
+                var parser = new Parser(line);
+                var expr = parser.Parse();
             }
         }
     }
