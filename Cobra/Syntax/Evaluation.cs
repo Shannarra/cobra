@@ -1,8 +1,6 @@
-﻿
+﻿using System;
 
-using System;
-
-namespace Cobra
+namespace Cobra.Syntax
 {
     class Evaluator
     {
@@ -42,7 +40,7 @@ namespace Cobra
                 return (int)num.NumberToken.Value;
             
             // parenthesis
-            if (root is ParethesizedExpression parethesized)
+            if (root is ParenthesizedExpression parethesized)
                 return EvaluateExpression(parethesized.Expression);
 
             throw new Exception($"Unexpected node {root.Kind}");

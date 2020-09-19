@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Index = System.Index;
+﻿using System.Collections.Generic;
 
-namespace Cobra
+namespace Cobra.Syntax
 {
     class Parser
     {
@@ -109,7 +105,7 @@ namespace Cobra
                 var left = NextToken();
                 var expr = ParseTermExpression();
                 var right = Match(SyntaxKind.ParenthesisClose);
-                return new ParethesizedExpression(left, expr, right);
+                return new ParenthesizedExpression(left, expr, right);
             }
 
             var numToken = Match(SyntaxKind.Number);
