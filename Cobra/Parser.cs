@@ -12,6 +12,10 @@ namespace Cobra
 
         private int position;
 
+        private List<string> errors = new List<string>();
+        
+        public IReadOnlyList<string> Errors => errors;
+
         public Parser(string text)
         {
             var lexer = new Lexer(text);
@@ -29,6 +33,7 @@ namespace Cobra
             } while (token.Kind != SyntaxKind.EndOfFile);
 
             this.tokens = tokens.ToArray();
+            errors.AddRange(lexer.Errors);
         }
 
         private SyntaxToken NextToken()
@@ -42,6 +47,8 @@ namespace Cobra
         {
             if (Current.Kind == kind)
                 return NextToken();
+
+            errors.Add($"[ERROR]: Unexpected token [{Current.Kind}], expected [{kind}]");
             return new SyntaxToken(kind, Current.Position, null, null);
         }
 
@@ -57,11 +64,18 @@ namespace Cobra
 
         private SyntaxToken Current => LookAhead(0);
 
-        public Expression Parse()
+        public SyntaxTree Parse()
+        {
+            var exp = ParseExpression();
+            var eofToken = Match(SyntaxKind.EndOfFile);
+            return new SyntaxTree(errors, exp, eofToken);
+        }
+
+        public Expression ParseExpression()
         {
             var left = ParsePrimary();
 
-            while (Current.Kind == SyntaxKind.Plus || 
+            while (Current.Kind == SyntaxKind.Plus ||
                    Current.Kind == SyntaxKind.Minus)
             {
                 var operatorToken = NextToken(); // we must have an operator here

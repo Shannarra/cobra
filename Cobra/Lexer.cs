@@ -12,11 +12,14 @@ namespace Cobra
 
         private char current => position >= text.Length ? '\0' : text[position];
 
+        private List<string> errors = new List<string>();
 
         public Lexer(string text)
         {
             this.text = text;
         }
+
+        public IEnumerable<string> Errors => errors;
 
         private void Next()
         {
@@ -72,7 +75,9 @@ namespace Cobra
                     return new SyntaxToken(SyntaxKind.ParenthesisClose, position++, ")", null);
             }
 
-            return new SyntaxToken(SyntaxKind.Error, position++, text.Substring(position -1, 1), null);
+            errors.Add($"[ERROR]: Bad character \"{current}\" at {position}");
+
+            return new SyntaxToken(SyntaxKind.Error, position++, text.Substring(position - 1, 1), null);
         }
     }
 }
