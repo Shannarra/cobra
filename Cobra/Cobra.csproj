@@ -7,11 +7,6 @@
 
   <ItemGroup>
     <None Remove=".gitignore~RF254970df.TMP" />
-    <None Remove="LICENSE" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="LICENSE" />
   </ItemGroup>
 
 </Project>
