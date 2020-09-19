@@ -41,7 +41,8 @@ namespace Cobra
                 var len = position - start;
                 var newText = text.Substring(start, len);
 
-                int.TryParse(newText, out var val);
+                if (!int.TryParse(newText, out var val))
+                    errors.Add($"The number {newText} cannot be represented as int");
 
                 return new SyntaxToken(SyntaxKind.Number, start, newText, val);
             }

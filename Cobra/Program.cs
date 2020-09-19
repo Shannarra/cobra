@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 
 namespace Cobra
 {
@@ -7,34 +8,57 @@ namespace Cobra
     {
         private static void Main()
         {
+            bool print = false;
             while (true)
             {
                 Console.Write("cobra >");
                 string line = Console.ReadLine();
 
-                if (string.IsNullOrEmpty(line))
+                if (string.IsNullOrEmpty(line) || line == "exit")
                     return;
 
-                var parser = new Parser(line);
-                var tree = parser.Parse();
+                if (line == "printToggle")
+                {
+                    print = !print;
+                    Console.WriteLine($"Printing tree now set to {print}.");
+                    continue;
+                }
+                else if (line == "clear")
+                {
+                    Console.Clear();
+                    continue;
+                }
+
+                var tree = SyntaxTree.Parse(line);
                 var color = Console.ForegroundColor;
+                if (print)
+                {
+                    
 
-                Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
 
-                TreePrint(tree.Root);
-                  
-                Console.ForegroundColor = color;
-                if (parser.Errors.Any())
+
+                    TreePrint(tree.Root);
+
+                    Console.ForegroundColor = color;
+                }
+
+                if (tree.Errors.Any())
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    foreach (var err in parser.Errors)
+                    foreach (var err in tree.Errors)
                     {
                         Console.WriteLine(err);
                     }
 
                     Console.ForegroundColor = color;
                 }
-
+                else
+                {
+                    var evaluator = new Evaluator(tree.Root);
+                    var res = evaluator.Evaluate();
+                    Console.WriteLine(res);
+                }
             }
         }
 

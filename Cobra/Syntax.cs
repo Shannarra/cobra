@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace Cobra
 {
@@ -41,7 +42,8 @@ namespace Cobra
 
         // Expressions
         NumberExpression,
-        BinaryOperationExpression
+        BinaryOperationExpression,
+        ParethesizedExpression
     }
 
     abstract class SyntaxNode
@@ -92,6 +94,28 @@ namespace Cobra
         }
     }
 
+    sealed class ParethesizedExpression : Expression
+    {
+        public SyntaxToken OpenParenthesisToken { get; }
+        public Expression Expression { get; }
+        public SyntaxToken CloseParenthesisToken { get; }
+        public override SyntaxKind Kind => SyntaxKind.ParethesizedExpression;
+
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return OpenParenthesisToken;
+            yield return Expression;
+            yield return CloseParenthesisToken;
+        }
+
+        public ParethesizedExpression(SyntaxToken openParenthesisToken, Expression expression, SyntaxToken closeParenthesisToken)
+        {
+            OpenParenthesisToken = openParenthesisToken;
+            Expression = expression;
+            CloseParenthesisToken = closeParenthesisToken;
+        }
+    }
+
     class SyntaxTree
     {
         public IReadOnlyList<string> Errors { get; }
@@ -104,5 +128,8 @@ namespace Cobra
             Root = root;
             EofToken = eofToken;
         }
+
+        public static SyntaxTree Parse(string text)
+            => new Parser(text).Parse();
     }
 }

@@ -66,17 +66,33 @@ namespace Cobra
 
         public SyntaxTree Parse()
         {
-            var exp = ParseExpression();
-            var eofToken = Match(SyntaxKind.EndOfFile);
+            var exp = ParseTermExpression();
+            // if for example we pass "1 1", we expect "1 + 1", or just "1 \0", so we get an error - expected EOF
+            var eofToken = Match(SyntaxKind.EndOfFile); 
             return new SyntaxTree(errors, exp, eofToken);
         }
 
-        public Expression ParseExpression()
+        public Expression ParseTermExpression()
         {
-            var left = ParsePrimary();
+            var left = ParseMultiplicationExpression();
 
             while (Current.Kind == SyntaxKind.Plus ||
                    Current.Kind == SyntaxKind.Minus)
+            {
+                var operatorToken = NextToken(); // we must have an operator here
+                var right = ParseMultiplicationExpression();
+                left = new BinaryOperationExpressionSyntax(left, operatorToken, right);
+            }
+
+            return left;
+        }
+        
+        public Expression ParseMultiplicationExpression()
+        {
+            var left = ParsePrimary();
+
+            while (Current.Kind == SyntaxKind.Star ||
+                   Current.Kind == SyntaxKind.Slash)
             {
                 var operatorToken = NextToken(); // we must have an operator here
                 var right = ParsePrimary();
@@ -88,6 +104,14 @@ namespace Cobra
 
         private Expression ParsePrimary()
         {
+            if (Current.Kind == SyntaxKind.ParenthesisOpen)
+            {
+                var left = NextToken();
+                var expr = ParseTermExpression();
+                var right = Match(SyntaxKind.ParenthesisClose);
+                return new ParethesizedExpression(left, expr, right);
+            }
+
             var numToken = Match(SyntaxKind.Number);
             return new NumberExpressionSyntax(numToken);
         }
