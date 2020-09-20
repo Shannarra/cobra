@@ -26,12 +26,16 @@ namespace Cobra.CodeDom.Syntax
                 
                 case SyntaxKind.Star:
                 case SyntaxKind.Slash:
-                    return 4; // higher priority than +, -
+                    return 5; // higher priority than +, -
                 
                 case SyntaxKind.Plus:
                 case SyntaxKind.Minus:
-                    return 3;
+                    return 4;
                 
+                case SyntaxKind.DoubleEquals: //priorities are SUPER important!!!!
+                case SyntaxKind.NotEquals:
+                    return 3;
+
                 case SyntaxKind.BooleanAnd:
                     return 2;
 

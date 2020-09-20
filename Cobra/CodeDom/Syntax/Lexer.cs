@@ -108,8 +108,6 @@ namespace Cobra.CodeDom.Syntax
                     return new SyntaxToken(SyntaxKind.ParenthesisOpen, position++, "(", null);
                 case ')':
                     return new SyntaxToken(SyntaxKind.ParenthesisClose, position++, ")", null);
-                case '!':
-                    return new SyntaxToken(SyntaxKind.BooleanNot, position++, "!", null);
                 case '&':
                     if (nextChar == '&')
                         return new SyntaxToken(SyntaxKind.BooleanAnd, position+=2, "&&", null);
@@ -118,6 +116,15 @@ namespace Cobra.CodeDom.Syntax
                     if (nextChar == '|') 
                         return new SyntaxToken(SyntaxKind.BooleanOr, position+=2, "||", null);
                     break;
+                case '=':
+                    if (nextChar == '=')
+                        return new SyntaxToken(SyntaxKind.DoubleEquals, position += 2, "==", null);
+                    break;
+                case '!':
+                    if (nextChar == '=')
+                        return new SyntaxToken(SyntaxKind.NotEquals, position += 2, "!=", null);
+                    else 
+                        return new SyntaxToken(SyntaxKind.BooleanNot, position++, "!", null);
             }
 
             errors.Add($"[ERROR]: Bad character \"{current}\" at {position}");

@@ -23,6 +23,9 @@ namespace Cobra.CodeDom.Binding
 
         private BoundBinaryOperator(SyntaxKind syntaxKind, BoundBinaryOperatorKind kind, Type type)
             : this(syntaxKind, kind, type, type, type) {}
+        
+        private BoundBinaryOperator(SyntaxKind syntaxKind, BoundBinaryOperatorKind kind, Type type, Type resultType)
+            : this(syntaxKind, kind, type, type, resultType) {}
 
         private static BoundBinaryOperator[] operators =
         {
@@ -30,9 +33,15 @@ namespace Cobra.CodeDom.Binding
             new BoundBinaryOperator(SyntaxKind.Minus, BoundBinaryOperatorKind.Subtraction, typeof(int)),
             new BoundBinaryOperator(SyntaxKind.Star, BoundBinaryOperatorKind.Multiplication, typeof(int)),
             new BoundBinaryOperator(SyntaxKind.Slash, BoundBinaryOperatorKind.Division, typeof(int)),
+
+            new BoundBinaryOperator(SyntaxKind.DoubleEquals, BoundBinaryOperatorKind.Equals, typeof(int), typeof(bool)),
+            new BoundBinaryOperator(SyntaxKind.NotEquals, BoundBinaryOperatorKind.NotEquals, typeof(int), typeof(bool)),
+
             
             new BoundBinaryOperator(SyntaxKind.BooleanAnd, BoundBinaryOperatorKind.LogicalAnd, typeof(bool)),
             new BoundBinaryOperator(SyntaxKind.BooleanOr, BoundBinaryOperatorKind.LogicalOr, typeof(bool)),
+            new BoundBinaryOperator(SyntaxKind.DoubleEquals, BoundBinaryOperatorKind.Equals, typeof(bool)),
+            new BoundBinaryOperator(SyntaxKind.NotEquals, BoundBinaryOperatorKind.NotEquals, typeof(bool)),
 
 
         };

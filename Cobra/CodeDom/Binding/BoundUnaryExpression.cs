@@ -8,7 +8,7 @@ namespace Cobra.CodeDom.Binding
         public BoundExpression Operand { get; }
         public override BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
         public BoundUnaryOperator Operator { get; }
-        public override Type Type => Operand.Type;
+        public override Type Type => Operator.ResultType;
 
         public BoundUnaryExpression(BoundUnaryOperator op, BoundExpression operand)
         {
