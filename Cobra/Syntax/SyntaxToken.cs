@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace Cobra.Syntax
 {
+    /// <summary>
+    /// Represents a single syntax token off the <see cref="SyntaxTree"/>
+    /// </summary>
     public sealed class SyntaxToken : SyntaxNode
     {
         public override SyntaxKind Kind { get; }

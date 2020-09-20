@@ -13,21 +13,20 @@ namespace Cobra
             while (true)
             {
                 Console.Write("cobra >");
-                string line = Console.ReadLine();
+                var line = Console.ReadLine();
 
                 if (string.IsNullOrEmpty(line) || line == "exit")
                     return;
 
-                if (line == "printToggle")
+                switch (line) //some operation 'commands'
                 {
-                    print = !print;
-                    Console.WriteLine($"Printing tree now set to {print}.");
-                    continue;
-                }
-                else if (line == "clear")
-                {
-                    Console.Clear();
-                    continue;
+                    case "printToggle":
+                        print = !print;
+                        Console.WriteLine($"Printing tree now set to {print}.");
+                        continue;
+                    case "clear":
+                        Console.Clear();
+                        continue;
                 }
 
                 var tree = SyntaxTree.Parse(line);
@@ -54,7 +53,13 @@ namespace Cobra
             }
         }
 
-        static void TreePrint(SyntaxNode root, string spacing = "", bool isLast = true) // printing stolen from windows cmd
+        /// <summary>
+        /// Prints the <see cref="SyntaxTree"/> in a structure line the windows cmd 'tree' command
+        /// </summary>
+        /// <param name="root">The root <see cref="SyntaxNode"/></param>
+        /// <param name="spacing">How much initial spacing to add</param>
+        /// <param name="isLast">Is the child leaf (last in the tree)?</param>
+        private static void TreePrint(SyntaxNode root, string spacing = "", bool isLast = true) // printing stolen from windows cmd
         {
             var symbol = isLast ? "└──" : "├──";
             

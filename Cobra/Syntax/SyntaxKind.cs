@@ -1,5 +1,8 @@
 ﻿namespace Cobra.Syntax
 {
+    /// <summary>
+    /// Represents the kind of any <see cref="SyntaxToken"/>
+    /// </summary>
     public enum SyntaxKind
     {
         // Primitive syntax
@@ -15,7 +18,7 @@
         EndOfFile,
 
         // Expressions
-        NumberExpression,
+        LiteralExpression,
         BinaryOperationExpression,
         ParenthesizedExpression
     }

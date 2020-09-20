@@ -2,6 +2,9 @@
 
 namespace Cobra.Syntax
 {
+    /// <summary>
+    /// Lex-es all characters into tokens
+    /// </summary>
     internal class Lexer
     {
         private readonly string text;
@@ -17,14 +20,24 @@ namespace Cobra.Syntax
             this.text = text;
         }
 
+        /// <summary>
+        /// An error list
+        /// </summary>
         public IEnumerable<string> Errors => errors;
 
+        /// <summary>
+        /// Advances the current <see cref="position"/>
+        /// </summary>
         private void Next()
         {
             position++;
         }
 
-        public SyntaxToken NextToken()
+        /// <summary>
+        /// Starts the Lex-ing work
+        /// </summary>
+        /// <returns></returns>
+        public SyntaxToken Lex()
         {
             if (position >= text.Length) 
                 return new SyntaxToken(SyntaxKind.EndOfFile, position, "\0", null);
