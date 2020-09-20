@@ -136,16 +136,28 @@ namespace Cobra.CodeDom.Syntax
         /// <returns></returns>
         private Expression ParsePrimary()
         {
-            if (Current.Kind == SyntaxKind.ParenthesisOpen)
+            switch (Current.Kind)
             {
-                var left = NextToken();
-                var expr = ParseExpression();
-                var right = MatchToken(SyntaxKind.ParenthesisClose);
-                return new ParenthesizedExpression(left, expr, right);
+                case SyntaxKind.ParenthesisOpen:
+                {
+                    var left = NextToken();
+                    var expr = ParseExpression();
+                    var right = MatchToken(SyntaxKind.ParenthesisClose);
+                    return new ParenthesizedExpression(left, expr, right);
+                }
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                {
+                    var keyword = NextToken(); // ALWAYS CONSUME TOKENS!
+                    var value = Current.Kind == SyntaxKind.TrueKeyword;
+                    return new LiteralExpressionSyntax(keyword, value);
+                }
+                default:
+                {
+                    var numToken = MatchToken(SyntaxKind.Number);
+                    return new LiteralExpressionSyntax(numToken);
+                }
             }
-
-            var numToken = MatchToken(SyntaxKind.Number);
-            return new LiteralExpressionSyntax(numToken);
         }
 
     }

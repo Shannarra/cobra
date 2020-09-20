@@ -22,5 +22,10 @@
         BinaryOperationExpression,
         ParenthesizedExpression,
         UnaryOperationExpression,
+
+        // keywords
+        FalseKeyword,
+        TrueKeyword,
+        Identifier
     }
 }

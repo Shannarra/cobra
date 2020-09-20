@@ -57,6 +57,20 @@ namespace Cobra.CodeDom.Syntax
 
                 return new SyntaxToken(SyntaxKind.Number, start, newText, val);
             }
+
+            if (char.IsLetter(current))
+            {
+                var start = position;
+
+                while (char.IsLetter(current))
+                    Next();
+
+                var len = position - start;
+                var newText = text.Substring(start, len);
+                var kind = SyntaxRules.GetKeyWordKind(newText);
+
+                return new SyntaxToken(kind, start, text, null);
+            }
             
             if (char.IsWhiteSpace(current))
             {

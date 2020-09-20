@@ -23,7 +23,7 @@ namespace Cobra.CodeDom
         /// Evaluates the given <see cref="Root"/>
         /// </summary>
         /// <returns></returns>
-        public int Evaluate()
+        public object Evaluate()
         {
             return EvaluateExpression(Root);
         }
@@ -33,15 +33,15 @@ namespace Cobra.CodeDom
         /// </summary>
         /// <param name="root">The root to start evaluation from</param>
         /// <returns></returns>
-        private int EvaluateExpression(BoundExpression root)
+        private object EvaluateExpression(BoundExpression root)
         {
             switch (root)
             {
                 // binary expression
                 case BoundBinaryExpression bin:
                 {
-                    var left = EvaluateExpression(bin.Left);
-                    var right = EvaluateExpression(bin.Right);
+                    var left = (int)EvaluateExpression(bin.Left);
+                    var right = (int)EvaluateExpression(bin.Right);
 
                     return bin.OperatorKind switch
                     {
@@ -54,7 +54,7 @@ namespace Cobra.CodeDom
                 }
                 case BoundUnaryExpression unary:
                 {
-                    var operand = EvaluateExpression(unary.Operand);
+                    var operand = (int)EvaluateExpression(unary.Operand);
                     return unary.OperatorKind switch
                     {
                         BoundUnaryOperatorKind.Negation => -operand,
@@ -64,7 +64,7 @@ namespace Cobra.CodeDom
                 }
                 // number expression
                 case BoundLiteralExpression num:
-                    return (int)num.Value;
+                    return num.Value;
                 // parenthesis
 
                 default:

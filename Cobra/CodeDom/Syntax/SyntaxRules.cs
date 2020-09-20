@@ -31,6 +31,19 @@ namespace Cobra.CodeDom.Syntax
                 default:
                     return 0;
             }
-        } 
+        }
+
+        public static SyntaxKind GetKeyWordKind(string newText)
+        {
+            switch (newText)
+            {
+                case "true":
+                    return SyntaxKind.TrueKeyword;
+                case "false":
+                    return SyntaxKind.FalseKeyword;
+                default:
+                    return SyntaxKind.Identifier;
+            }
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace Cobra.CodeDom.Binding
 
         private BoundExpression BindLiteralExpression(LiteralExpressionSyntax expression)
         {
-            var value = expression.LiteralToken.Value as int? ?? 0;
+            var value = expression.Value ?? 0;
             return new BoundLiteralExpression(value);
         }
 

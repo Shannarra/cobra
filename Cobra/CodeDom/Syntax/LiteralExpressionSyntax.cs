@@ -8,8 +8,12 @@ namespace Cobra.CodeDom.Syntax
     public sealed class LiteralExpressionSyntax: Expression
     {
         public LiteralExpressionSyntax(SyntaxToken token)
+            : this(token, token.Value) {}
+        
+        public LiteralExpressionSyntax(SyntaxToken token, object value)
         {
-            LiteralToken = token;
+            LiteralToken = token; 
+            Value = value;
         }
 
         public override SyntaxKind Kind => SyntaxKind.LiteralExpression;
@@ -20,5 +24,6 @@ namespace Cobra.CodeDom.Syntax
         }
 
         public SyntaxToken LiteralToken { get; }
+        public object Value { get; }
     }
 }
