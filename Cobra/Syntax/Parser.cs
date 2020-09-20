@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Cobra.Syntax
 {
@@ -93,10 +94,43 @@ namespace Cobra.Syntax
         /// <returns></returns>
         public SyntaxTree Parse()
         {
-            var exp = ParseTermExpression();
+            var exp = ParseExpression();
             // if for example we pass "1 1", we expect "1 + 1", or just "1 \0", so we get an error - expected EOF
             var eofToken = MatchToken(SyntaxKind.EndOfFile); 
             return new SyntaxTree(errors, exp, eofToken);
+        }
+
+        private Expression ParseExpression(int parentPresent = 0)
+        {
+            var left = ParsePrimary();
+
+            while (true)
+            {
+                var present = GetBinaryOperatorPriority(Current.Kind);
+                if (present == 0 || present <= parentPresent)
+                    break;
+
+                var operatorToken = NextToken();
+                var right = ParseExpression(present);
+                left = new BinaryOperationExpressionSyntax(left, operatorToken, right);
+            }
+
+            return left;
+        }
+
+        private static int GetBinaryOperatorPriority(SyntaxKind kind)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.Plus:
+                case SyntaxKind.Minus:
+                    return 1;
+                case SyntaxKind.Star:
+                case SyntaxKind.Slash:
+                    return 2; // higher priority than +, -
+                default:
+                    return 0;
+            }
         }
         
         /// <summary>
@@ -108,7 +142,7 @@ namespace Cobra.Syntax
             if (Current.Kind == SyntaxKind.ParenthesisOpen)
             {
                 var left = NextToken();
-                var expr = ParseTermExpression();
+                var expr = ParseExpression();
                 var right = MatchToken(SyntaxKind.ParenthesisClose);
                 return new ParenthesizedExpression(left, expr, right);
             }
@@ -117,42 +151,5 @@ namespace Cobra.Syntax
             return new LiteralExpressionSyntax(numToken);
         }
 
-        /// <summary>
-        /// Parses a term (-,+) expression
-        /// </summary>
-        /// <returns></returns>
-        public Expression ParseTermExpression()
-        {
-            var left = ParseMultiplicationExpression();
-
-            while (Current.Kind == SyntaxKind.Plus ||
-                   Current.Kind == SyntaxKind.Minus)
-            {
-                var operatorToken = NextToken(); // we must have an operator here
-                var right = ParseMultiplicationExpression();
-                left = new BinaryOperationExpressionSyntax(left, operatorToken, right);
-            }
-
-            return left;
-        }
-        
-        /// <summary>
-        /// Parses multiplication (factor) expression
-        /// </summary>
-        /// <returns></returns>
-        public Expression ParseMultiplicationExpression()
-        {
-            var left = ParsePrimary();
-
-            while (Current.Kind == SyntaxKind.Star ||
-                   Current.Kind == SyntaxKind.Slash)
-            {
-                var operatorToken = NextToken(); // we must have an operator here
-                var right = ParsePrimary();
-                left = new BinaryOperationExpressionSyntax(left, operatorToken, right);
-            }
-
-            return left;
-        }
     }
 }
