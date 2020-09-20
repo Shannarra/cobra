@@ -20,6 +20,7 @@
         // Expressions
         LiteralExpression,
         BinaryOperationExpression,
-        ParenthesizedExpression
+        ParenthesizedExpression,
+        UnaryOperationExpression
     }
 }

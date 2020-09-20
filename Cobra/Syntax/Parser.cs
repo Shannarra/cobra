@@ -100,14 +100,24 @@ namespace Cobra.Syntax
             return new SyntaxTree(errors, exp, eofToken);
         }
 
-        private Expression ParseExpression(int parentPresent = 0)
+        private Expression ParseExpression(int priority = 0)
         {
-            var left = ParsePrimary();
+            Expression left;
+
+            var unaryPresent = Current.Kind.GetUnaryOperatorPriority();
+            if (unaryPresent != 0 && unaryPresent >= priority)
+            {
+                var operatorToken = NextToken();
+                var operand = ParseExpression(unaryPresent);
+                left = new UnaryOperationExpressionSyntax(operatorToken, operand);
+            }
+            else
+                left = ParsePrimary();
 
             while (true)
             {
-                var present = GetBinaryOperatorPriority(Current.Kind);
-                if (present == 0 || present <= parentPresent)
+                var present = Current.Kind.GetBinaryOperatorPriority();
+                if (present == 0 || present <= priority)
                     break;
 
                 var operatorToken = NextToken();
@@ -118,21 +128,6 @@ namespace Cobra.Syntax
             return left;
         }
 
-        private static int GetBinaryOperatorPriority(SyntaxKind kind)
-        {
-            switch (kind)
-            {
-                case SyntaxKind.Plus:
-                case SyntaxKind.Minus:
-                    return 1;
-                case SyntaxKind.Star:
-                case SyntaxKind.Slash:
-                    return 2; // higher priority than +, -
-                default:
-                    return 0;
-            }
-        }
-        
         /// <summary>
         /// Parses a primary (first-order) expression
         /// </summary>

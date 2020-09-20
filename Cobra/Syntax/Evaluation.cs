@@ -50,6 +50,16 @@ namespace Cobra.Syntax
                         _ => throw new Exception($"Unexpected operator {bin.OperatorToken.Kind}")
                     };
                 }
+                case UnaryOperationExpressionSyntax unary:
+                {
+                    var operand = EvaluateExpression(unary.Operand);
+                    return unary.OperatorToken.Kind switch
+                    {
+                        SyntaxKind.Minus => -operand,
+                        SyntaxKind.Plus => operand,
+                        _ => throw new Exception($"Unexpected unary operator [{unary.OperatorToken.Kind}]")
+                    };
+                }
                 // number expression
                 case LiteralExpressionSyntax num:
                     return (int)num.LiteralToken.Value;
