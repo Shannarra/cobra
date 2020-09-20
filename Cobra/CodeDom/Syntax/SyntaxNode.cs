@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Cobra.Syntax
+namespace Cobra.CodeDom.Syntax
 {
     /// <summary>
     /// Represents an expression node (leaf) of the <see cref="SyntaxTree"/>

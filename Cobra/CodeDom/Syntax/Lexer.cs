@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Cobra.Syntax
+namespace Cobra.CodeDom.Syntax
 {
     /// <summary>
     /// Lex-es all characters into tokens

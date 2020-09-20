@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
+using Cobra.CodeDom.Syntax;
 
-namespace Cobra.Syntax
+namespace Cobra.CodeDom
 {
     /// <summary>
     /// Evaluator for expressions

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Cobra.Syntax
+namespace Cobra.CodeDom.Syntax
 {
     /// <summary>
     /// Represents a single syntax token off the <see cref="SyntaxTree"/>

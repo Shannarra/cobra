@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Cobra.Syntax;
+using Cobra.CodeDom;
+using Cobra.CodeDom.Syntax;
 
 
 namespace Cobra

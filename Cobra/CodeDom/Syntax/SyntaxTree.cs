@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Cobra.Syntax
+namespace Cobra.CodeDom.Syntax
 {
     /// <summary>
     /// Represents the overall structure - the syntax tree of the compiler

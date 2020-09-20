@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cobra.Syntax
+namespace Cobra.CodeDom.Syntax
 {
     public static class SyntaxRules
     {
