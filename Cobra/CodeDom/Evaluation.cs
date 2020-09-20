@@ -1,4 +1,5 @@
 ﻿using System;
+using Cobra.CodeDom.Binding;
 using Cobra.CodeDom.Syntax;
 
 namespace Cobra.CodeDom
@@ -6,14 +7,14 @@ namespace Cobra.CodeDom
     /// <summary>
     /// Evaluator for expressions
     /// </summary>
-    public class Evaluator
+    internal class Evaluator
     {
         /// <summary>
         /// Root expression to evaluate
         /// </summary>
-        public Expression Root { get; }
+        public BoundExpression Root { get; }
 
-        public Evaluator(Expression root)
+        public Evaluator(BoundExpression root)
         {
             Root = root;
         }
@@ -32,41 +33,40 @@ namespace Cobra.CodeDom
         /// </summary>
         /// <param name="root">The root to start evaluation from</param>
         /// <returns></returns>
-        private int EvaluateExpression(Expression root)
+        private int EvaluateExpression(BoundExpression root)
         {
             switch (root)
             {
                 // binary expression
-                case BinaryOperationExpressionSyntax bin:
+                case BoundBinaryExpression bin:
                 {
                     var left = EvaluateExpression(bin.Left);
                     var right = EvaluateExpression(bin.Right);
 
-                    return bin.OperatorToken.Kind switch
+                    return bin.OperatorKind switch
                     {
-                        SyntaxKind.Plus => left + right,
-                        SyntaxKind.Minus => left - right,
-                        SyntaxKind.Star => left * right,
-                        SyntaxKind.Slash => left / right,
-                        _ => throw new Exception($"Unexpected operator {bin.OperatorToken.Kind}")
+                        BoundBinaryOperatorKind.Addition => left + right,
+                        BoundBinaryOperatorKind.Subtraction => left - right,
+                        BoundBinaryOperatorKind.Multiplication => left * right,
+                        BoundBinaryOperatorKind.Division => left / right,
+                        _ => throw new Exception($"Unexpected operator {bin.OperatorKind}")
                     };
                 }
-                case UnaryOperationExpressionSyntax unary:
+                case BoundUnaryExpression unary:
                 {
                     var operand = EvaluateExpression(unary.Operand);
-                    return unary.OperatorToken.Kind switch
+                    return unary.OperatorKind switch
                     {
-                        SyntaxKind.Minus => -operand,
-                        SyntaxKind.Plus => operand,
-                        _ => throw new Exception($"Unexpected unary operator [{unary.OperatorToken.Kind}]")
+                        BoundUnaryOperatorKind.Negation => -operand,
+                        BoundUnaryOperatorKind.Identity => operand,
+                        _ => throw new Exception($"Unexpected unary operator [{unary.OperatorKind}]")
                     };
                 }
                 // number expression
-                case LiteralExpressionSyntax num:
-                    return (int)num.LiteralToken.Value;
+                case BoundLiteralExpression num:
+                    return (int)num.Value;
                 // parenthesis
-                case ParenthesizedExpression parenthesized:
-                    return EvaluateExpression(parenthesized.Expression);
+
                 default:
                     throw new Exception($"Unexpected node {root.Kind}");
             }
