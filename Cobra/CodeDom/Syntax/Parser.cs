@@ -149,7 +149,7 @@ namespace Cobra.CodeDom.Syntax
                 case SyntaxKind.FalseKeyword:
                 {
                     var keyword = NextToken(); // ALWAYS CONSUME TOKENS!
-                    var value = Current.Kind == SyntaxKind.TrueKeyword;
+                    var value = keyword.Kind == SyntaxKind.TrueKeyword;
                     return new LiteralExpressionSyntax(keyword, value);
                 }
                 default:

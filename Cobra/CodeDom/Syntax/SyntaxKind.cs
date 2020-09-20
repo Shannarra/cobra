@@ -16,6 +16,9 @@
         ParenthesisClose,
         Error,
         EndOfFile,
+        BooleanNot,
+        BooleanAnd, // &&
+        BooleanOr,  // ||
 
         // Expressions
         LiteralExpression,
@@ -26,6 +29,9 @@
         // keywords
         FalseKeyword,
         TrueKeyword,
-        Identifier
+        Identifier,
+
+
+        
     }
 }

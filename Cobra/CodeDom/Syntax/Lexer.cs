@@ -11,7 +11,9 @@ namespace Cobra.CodeDom.Syntax
 
         private int position;
 
-        private char current => position >= text.Length ? '\0' : text[position];
+        private char current => LookAhead(0);
+
+        private char nextChar => LookAhead(1);
 
         private List<string> errors = new List<string>();
 
@@ -31,6 +33,13 @@ namespace Cobra.CodeDom.Syntax
         private void Next()
         {
             position++;
+        }
+
+        private char LookAhead(int offset)
+        {
+            var index = position + offset;
+
+            return index >= text.Length ? '\0' : text[index];
         }
 
         /// <summary>
@@ -99,6 +108,16 @@ namespace Cobra.CodeDom.Syntax
                     return new SyntaxToken(SyntaxKind.ParenthesisOpen, position++, "(", null);
                 case ')':
                     return new SyntaxToken(SyntaxKind.ParenthesisClose, position++, ")", null);
+                case '!':
+                    return new SyntaxToken(SyntaxKind.BooleanNot, position++, "!", null);
+                case '&':
+                    if (nextChar == '&')
+                        return new SyntaxToken(SyntaxKind.BooleanAnd, position+=2, "&&", null);
+                    break;
+                case '|':
+                    if (nextChar == '|') 
+                        return new SyntaxToken(SyntaxKind.BooleanOr, position+=2, "||", null);
+                    break;
             }
 
             errors.Add($"[ERROR]: Bad character \"{current}\" at {position}");

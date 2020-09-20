@@ -40,25 +40,28 @@ namespace Cobra.CodeDom
                 // binary expression
                 case BoundBinaryExpression bin:
                 {
-                    var left = (int)EvaluateExpression(bin.Left);
-                    var right = (int)EvaluateExpression(bin.Right);
+                    var left = EvaluateExpression(bin.Left);
+                    var right = EvaluateExpression(bin.Right);
 
-                    return bin.OperatorKind switch
+                    return bin.Operator.Kind switch
                     {
-                        BoundBinaryOperatorKind.Addition => left + right,
-                        BoundBinaryOperatorKind.Subtraction => left - right,
-                        BoundBinaryOperatorKind.Multiplication => left * right,
-                        BoundBinaryOperatorKind.Division => left / right,
-                        _ => throw new Exception($"Unexpected operator {bin.OperatorKind}")
+                        BoundBinaryOperatorKind.Addition => (int)left + (int)right,
+                        BoundBinaryOperatorKind.Subtraction => (int)left - (int)right,
+                        BoundBinaryOperatorKind.Multiplication => (int)left * (int)right,
+                        BoundBinaryOperatorKind.Division => (int)left / (int)right,
+                        BoundBinaryOperatorKind.LogicalAnd => (bool)left && (bool)right,
+                        BoundBinaryOperatorKind.LogicalOr => (bool)left || (bool)right,
+                        _ => throw new Exception($"Unexpected operator {bin.Operator.Kind}")
                     };
                 }
                 case BoundUnaryExpression unary:
                 {
-                    var operand = (int)EvaluateExpression(unary.Operand);
+                    var operand = EvaluateExpression(unary.Operand);
                     return unary.OperatorKind switch
                     {
-                        BoundUnaryOperatorKind.Negation => -operand,
-                        BoundUnaryOperatorKind.Identity => operand,
+                        BoundUnaryOperatorKind.Negation => -(int)operand,
+                        BoundUnaryOperatorKind.Identity => (int)operand,
+                        BoundUnaryOperatorKind.LogicalNegation => !(bool)operand,
                         _ => throw new Exception($"Unexpected unary operator [{unary.OperatorKind}]")
                     };
                 }

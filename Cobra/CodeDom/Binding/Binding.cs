@@ -39,15 +39,15 @@ namespace Cobra.CodeDom.Binding
         private BoundExpression BindUnaryExpression(UnaryOperationExpressionSyntax expression)
         {
             var boundOperand = Bind(expression.Operand);
-            var boundOperatorKind = BindUnaryOperatorKind(expression.OperatorToken.Kind, boundOperand.Type);
+            var boundOperator = BoundUnaryOperator.Bind(expression.OperatorToken.Kind, boundOperand.Type);
 
-            if (boundOperatorKind == null)
+            if (boundOperator == null)
             {
                 errors.Add($"Unary operator {expression.OperatorToken.Text} is not defined for type {boundOperand.Type}");
                 return boundOperand;
             }
 
-            return new BoundUnaryExpression(boundOperatorKind.Value, boundOperand);
+            return new BoundUnaryExpression(boundOperator, boundOperand);
         }
 
         
@@ -56,52 +56,15 @@ namespace Cobra.CodeDom.Binding
         {
             var boundLeftOperand = Bind(expression.Left);
             var boundRightOperand = Bind(expression.Right);
-            var boundOperatorKind = BindBinaryOperatorKind(expression.OperatorToken.Kind, boundLeftOperand.Type, boundRightOperand.Type);
+            var boundOperator = BoundBinaryOperator.Bind(expression.OperatorToken.Kind, boundLeftOperand.Type, boundRightOperand.Type);
 
-            if (boundOperatorKind == null)
+            if (boundOperator == null)
             {
                 errors.Add($"Binary operator {expression.OperatorToken.Text} is not defined for types {boundLeftOperand.Type} and {boundRightOperand.Type}");
                 return boundLeftOperand;
             }
 
-            return new BoundBinaryExpression(boundLeftOperand, boundOperatorKind.Value, boundRightOperand);
-        }
-        
-        private BoundUnaryOperatorKind? BindUnaryOperatorKind(SyntaxKind expressionKind, Type boundOperandType)
-        {
-            if (boundOperandType != typeof(int))
-                return null;
-
-
-            switch (expressionKind)
-            {
-                case SyntaxKind.Plus:
-                    return BoundUnaryOperatorKind.Identity;
-                case SyntaxKind.Minus:
-                    return BoundUnaryOperatorKind.Negation;
-                default:
-                    throw new Exception($"Unexpected expression of kind [{expressionKind}]");
-            }
-        }
-
-        private BoundBinaryOperatorKind? BindBinaryOperatorKind(SyntaxKind expressionKind, Type leftType, Type rightType)
-        {
-            if (leftType != typeof(int) && rightType != typeof(int))
-                return null;
-
-            switch (expressionKind)
-            {
-                case SyntaxKind.Plus:
-                    return BoundBinaryOperatorKind.Addition;
-                case SyntaxKind.Minus:
-                    return BoundBinaryOperatorKind.Subtraction;
-                case SyntaxKind.Star:
-                    return BoundBinaryOperatorKind.Multiplication;
-                case SyntaxKind.Slash:
-                    return BoundBinaryOperatorKind.Division;
-                default:
-                    throw new Exception($"Unexpected expression of kind [{expressionKind}]");
-            }
+            return new BoundBinaryExpression(boundLeftOperand,  boundOperator, boundRightOperand);
         }
     }
 }

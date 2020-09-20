@@ -7,12 +7,14 @@ namespace Cobra.CodeDom.Binding
         public BoundUnaryOperatorKind OperatorKind { get; }
         public BoundExpression Operand { get; }
         public override BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
+        public BoundUnaryOperator Operator { get; }
         public override Type Type => Operand.Type;
 
-        public BoundUnaryExpression(BoundUnaryOperatorKind kind, BoundExpression operand)
+        public BoundUnaryExpression(BoundUnaryOperator op, BoundExpression operand)
         {
-            OperatorKind = kind;
+            Operator = op;
             Operand = operand;
         }
+
     }
 }
