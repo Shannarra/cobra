@@ -2,7 +2,7 @@
 
 namespace Cobra.Syntax
 {
-    sealed class BinaryOperationExpressionSyntax : Expression
+    public sealed class BinaryOperationExpressionSyntax : Expression
     {
         public Expression Left { get; }
         public SyntaxToken OperatorToken { get; }

@@ -1,6 +1,6 @@
 ﻿namespace Cobra.Syntax
 {
-    internal enum SyntaxKind
+    public enum SyntaxKind
     {
         // Primitive syntax
         Number,
@@ -17,6 +17,6 @@
         // Expressions
         NumberExpression,
         BinaryOperationExpression,
-        ParethesizedExpression
+        ParenthesizedExpression
     }
 }

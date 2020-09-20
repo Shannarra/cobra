@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Cobra.Syntax
 {
-    class SyntaxToken : SyntaxNode
+    public sealed class SyntaxToken : SyntaxNode
     {
         public override SyntaxKind Kind { get; }
 

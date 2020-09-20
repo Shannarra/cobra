@@ -2,7 +2,7 @@
 
 namespace Cobra.Syntax
 {
-    class Parser
+    internal sealed class Parser
     {
         private readonly SyntaxToken[] tokens;
 
@@ -39,7 +39,7 @@ namespace Cobra.Syntax
             return curr;
         }
 
-        private SyntaxToken Match(SyntaxKind kind)
+        private SyntaxToken MatchToken(SyntaxKind kind)
         {
             if (Current.Kind == kind)
                 return NextToken();
@@ -64,8 +64,22 @@ namespace Cobra.Syntax
         {
             var exp = ParseTermExpression();
             // if for example we pass "1 1", we expect "1 + 1", or just "1 \0", so we get an error - expected EOF
-            var eofToken = Match(SyntaxKind.EndOfFile); 
+            var eofToken = MatchToken(SyntaxKind.EndOfFile); 
             return new SyntaxTree(errors, exp, eofToken);
+        }
+        
+        private Expression ParsePrimary()
+        {
+            if (Current.Kind == SyntaxKind.ParenthesisOpen)
+            {
+                var left = NextToken();
+                var expr = ParseTermExpression();
+                var right = MatchToken(SyntaxKind.ParenthesisClose);
+                return new ParenthesizedExpression(left, expr, right);
+            }
+
+            var numToken = MatchToken(SyntaxKind.Number);
+            return new NumberExpressionSyntax(numToken);
         }
 
         public Expression ParseTermExpression()
@@ -98,18 +112,6 @@ namespace Cobra.Syntax
             return left;
         }
 
-        private Expression ParsePrimary()
-        {
-            if (Current.Kind == SyntaxKind.ParenthesisOpen)
-            {
-                var left = NextToken();
-                var expr = ParseTermExpression();
-                var right = Match(SyntaxKind.ParenthesisClose);
-                return new ParenthesizedExpression(left, expr, right);
-            }
-
-            var numToken = Match(SyntaxKind.Number);
-            return new NumberExpressionSyntax(numToken);
-        }
+        
     }
 }

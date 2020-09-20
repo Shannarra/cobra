@@ -2,20 +2,20 @@
 
 namespace Cobra.Syntax
 {
-    sealed class NumberExpressionSyntax : Expression
+    public sealed class LiteralExpressionSyntax: Expression
     {
-        public NumberExpressionSyntax(SyntaxToken token)
+        public LiteralExpressionSyntax(SyntaxToken token)
         {
-            NumberToken = token;
+            LiteralToken = token;
         }
 
         public override SyntaxKind Kind => SyntaxKind.NumberExpression;
 
         public override IEnumerable<SyntaxNode> GetChildren()
         {
-            yield return NumberToken;
+            yield return LiteralToken;
         }
 
-        public SyntaxToken NumberToken { get; }
+        public SyntaxToken LiteralToken { get; }
     }
 }

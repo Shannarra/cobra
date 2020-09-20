@@ -2,7 +2,7 @@
 
 namespace Cobra.Syntax
 {
-    class Lexer
+    internal class Lexer
     {
         private readonly string text;
 

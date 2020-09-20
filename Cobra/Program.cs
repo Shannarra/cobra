@@ -5,11 +5,11 @@ using Cobra.Syntax;
 
 namespace Cobra
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main()
         {
-            bool print = false;
+            var print = false;
             while (true)
             {
                 Console.Write("cobra >");
@@ -31,28 +31,19 @@ namespace Cobra
                 }
 
                 var tree = SyntaxTree.Parse(line);
-                var color = Console.ForegroundColor;
                 if (print)
                 {
-                    
-
                     Console.ForegroundColor = ConsoleColor.DarkGray;
-
-
                     TreePrint(tree.Root);
-
-                    Console.ForegroundColor = color;
+                    Console.ResetColor();
                 }
 
                 if (tree.Errors.Any())
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     foreach (var err in tree.Errors)
-                    {
                         Console.WriteLine(err);
-                    }
-
-                    Console.ForegroundColor = color;
+                    Console.ResetColor();
                 }
                 else
                 {

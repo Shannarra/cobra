@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Cobra.Syntax
 {
-    class SyntaxTree
+    public sealed class SyntaxTree
     {
         public IReadOnlyList<string> Errors { get; }
         public Expression Root { get; }

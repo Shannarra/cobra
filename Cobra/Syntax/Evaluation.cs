@@ -2,7 +2,7 @@
 
 namespace Cobra.Syntax
 {
-    class Evaluator
+    public class Evaluator
     {
         public Expression Root { get; }
 

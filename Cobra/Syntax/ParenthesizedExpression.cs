@@ -2,7 +2,7 @@
 
 namespace Cobra.Syntax
 {
-    sealed class ParenthesizedExpression : Expression
+    public sealed class ParenthesizedExpression : Expression
     {
         public SyntaxToken OpenParenthesisToken { get; }
         public Expression Expression { get; }
