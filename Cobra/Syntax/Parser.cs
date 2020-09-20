@@ -105,9 +105,11 @@ namespace Cobra.Syntax
             Expression left;
 
             var unaryPresent = Current.Kind.GetUnaryOperatorPriority();
+
             if (unaryPresent != 0 && unaryPresent >= priority)
             {
                 var operatorToken = NextToken();
+                
                 var operand = ParseExpression(unaryPresent);
                 left = new UnaryOperationExpressionSyntax(operatorToken, operand);
             }

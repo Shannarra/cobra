@@ -31,6 +31,6 @@ namespace Cobra.Syntax
                 default:
                     return 0;
             }
-        }
+        } 
     }
 }

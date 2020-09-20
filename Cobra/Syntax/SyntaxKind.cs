@@ -21,6 +21,6 @@
         LiteralExpression,
         BinaryOperationExpression,
         ParenthesizedExpression,
-        UnaryOperationExpression
+        UnaryOperationExpression,
     }
 }
