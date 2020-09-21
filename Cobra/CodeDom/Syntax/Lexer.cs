@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Cobra.CodeDom.Syntax
 {
@@ -116,6 +117,18 @@ namespace Cobra.CodeDom.Syntax
                     if (nextChar == '|') 
                         return new SyntaxToken(SyntaxKind.BooleanOr, position+=2, "||", null);
                     break;
+                case 'a':
+                    if (nextChar == 'n' && LookAhead(2) == 'd') //and
+                        return new SyntaxToken(SyntaxKind.TextAndKeyword, position += 3, "and", null);
+                    break;
+                case 'o':
+                    if (nextChar == 'r') //or
+                        return new SyntaxToken(SyntaxKind.TextAndKeyword, position += 2, "or", null);
+                    break;
+                case 'i':
+                    if (nextChar == 's') // is
+                        return new SyntaxToken(SyntaxKind.IsTextBooleanKeyword, position += 2, "is", null);
+                    break;
                 case '=':
                     if (nextChar == '=')
                         return new SyntaxToken(SyntaxKind.DoubleEquals, position += 2, "==", null);
@@ -123,6 +136,8 @@ namespace Cobra.CodeDom.Syntax
                 case '!':
                     if (nextChar == '=')
                         return new SyntaxToken(SyntaxKind.NotEquals, position += 2, "!=", null);
+                    else if (nextChar == 'i' && LookAhead(2) == 's')
+                        return new SyntaxToken(SyntaxKind.NegatedIsTextKeyword, position += 3, "!is",null);
                     else 
                         return new SyntaxToken(SyntaxKind.BooleanNot, position++, "!", null);
             }

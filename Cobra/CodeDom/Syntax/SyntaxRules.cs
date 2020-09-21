@@ -34,12 +34,16 @@ namespace Cobra.CodeDom.Syntax
                 
                 case SyntaxKind.DoubleEquals: //priorities are SUPER important!!!!
                 case SyntaxKind.NotEquals:
+                case SyntaxKind.IsTextBooleanKeyword: // is  
+                case SyntaxKind.NegatedIsTextKeyword: // !is
                     return 3;
 
                 case SyntaxKind.BooleanAnd:
+                case SyntaxKind.TextAndKeyword:
                     return 2;
 
                 case SyntaxKind.BooleanOr:
+                case SyntaxKind.TextOrKeyword:
                     return 1;
                          
                 default:
@@ -57,6 +61,14 @@ namespace Cobra.CodeDom.Syntax
                     return SyntaxKind.TrueKeyword;
                 case "false":
                     return SyntaxKind.FalseKeyword;
+                case "and":
+                    return SyntaxKind.TextAndKeyword;
+                case "or":
+                    return SyntaxKind.TextOrKeyword;
+                case "is":
+                    return SyntaxKind.IsTextBooleanKeyword;
+                case "!is":
+                    return SyntaxKind.NegatedIsTextKeyword;
                 default:
                     return SyntaxKind.Identifier;
             }

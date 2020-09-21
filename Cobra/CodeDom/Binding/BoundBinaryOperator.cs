@@ -27,21 +27,25 @@ namespace Cobra.CodeDom.Binding
         private BoundBinaryOperator(SyntaxKind syntaxKind, BoundBinaryOperatorKind kind, Type type, Type resultType)
             : this(syntaxKind, kind, type, type, resultType) {}
 
-        private static BoundBinaryOperator[] operators =
+        private static readonly BoundBinaryOperator[] operators =
         {
-            new BoundBinaryOperator(SyntaxKind.Plus, BoundBinaryOperatorKind.Addition, typeof(int)),
-            new BoundBinaryOperator(SyntaxKind.Minus, BoundBinaryOperatorKind.Subtraction, typeof(int)),
-            new BoundBinaryOperator(SyntaxKind.Star, BoundBinaryOperatorKind.Multiplication, typeof(int)),
-            new BoundBinaryOperator(SyntaxKind.Slash, BoundBinaryOperatorKind.Division, typeof(int)),
+            new BoundBinaryOperator(SyntaxKind.Plus, BoundBinaryOperatorKind.Addition, typeof(int)),                                // 3 + 3
+            new BoundBinaryOperator(SyntaxKind.Minus, BoundBinaryOperatorKind.Subtraction, typeof(int)),                            // 3 - 3
+            new BoundBinaryOperator(SyntaxKind.Star, BoundBinaryOperatorKind.Multiplication, typeof(int)),                          // 3 * 3
+            new BoundBinaryOperator(SyntaxKind.Slash, BoundBinaryOperatorKind.Division, typeof(int)),                               // 3 / 3
 
-            new BoundBinaryOperator(SyntaxKind.DoubleEquals, BoundBinaryOperatorKind.Equals, typeof(int), typeof(bool)),
-            new BoundBinaryOperator(SyntaxKind.NotEquals, BoundBinaryOperatorKind.NotEquals, typeof(int), typeof(bool)),
+            new BoundBinaryOperator(SyntaxKind.DoubleEquals, BoundBinaryOperatorKind.Equals, typeof(int), typeof(bool)),   // 3 == 3
+            new BoundBinaryOperator(SyntaxKind.NotEquals, BoundBinaryOperatorKind.NotEquals, typeof(int), typeof(bool)),   // 3 != 3
 
             
-            new BoundBinaryOperator(SyntaxKind.BooleanAnd, BoundBinaryOperatorKind.LogicalAnd, typeof(bool)),
-            new BoundBinaryOperator(SyntaxKind.BooleanOr, BoundBinaryOperatorKind.LogicalOr, typeof(bool)),
-            new BoundBinaryOperator(SyntaxKind.DoubleEquals, BoundBinaryOperatorKind.Equals, typeof(bool)),
-            new BoundBinaryOperator(SyntaxKind.NotEquals, BoundBinaryOperatorKind.NotEquals, typeof(bool)),
+            new BoundBinaryOperator(SyntaxKind.BooleanAnd, BoundBinaryOperatorKind.LogicalAnd, typeof(bool)),                       // true && false
+            new BoundBinaryOperator(SyntaxKind.BooleanOr, BoundBinaryOperatorKind.LogicalOr, typeof(bool)),                         // true || false
+            new BoundBinaryOperator(SyntaxKind.TextAndKeyword, BoundBinaryOperatorKind.LogicalAnd, typeof(bool)),                   // true and false
+            new BoundBinaryOperator(SyntaxKind.TextOrKeyword, BoundBinaryOperatorKind.LogicalOr, typeof(bool)),                     // true or false
+            new BoundBinaryOperator(SyntaxKind.DoubleEquals, BoundBinaryOperatorKind.Equals, typeof(bool)),                         // true == false
+            new BoundBinaryOperator(SyntaxKind.IsTextBooleanKeyword, BoundBinaryOperatorKind.Equals, typeof(bool)),                 // true is false
+            new BoundBinaryOperator(SyntaxKind.NotEquals, BoundBinaryOperatorKind.NotEquals, typeof(bool)),                         // true != false
+            new BoundBinaryOperator(SyntaxKind.NegatedIsTextKeyword, BoundBinaryOperatorKind.NotEquals, typeof(bool)),              // true !is false
 
 
         };

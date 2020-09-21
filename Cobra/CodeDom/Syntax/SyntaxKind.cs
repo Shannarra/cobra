@@ -17,8 +17,12 @@
         Error,
         EndOfFile,
         BooleanNot,
-        BooleanAnd, // &&
-        BooleanOr,  // ||
+        BooleanAnd,             // &&
+        BooleanOr,              // ||
+        TextAndKeyword,         // and
+        TextOrKeyword,          // or
+        IsTextBooleanKeyword,   // is (keyword)
+        NegatedIsTextKeyword,   // !is 
 
         // Expressions
         LiteralExpression,
@@ -33,6 +37,9 @@
 
 
         NotEquals,
-        DoubleEquals
+        DoubleEquals,
+
+
+        
     }
 }
