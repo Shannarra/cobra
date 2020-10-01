@@ -30,7 +30,7 @@ namespace Cobra
                         Console.Clear();
                         continue;
                 }
-
+                 
                 var tree = SyntaxTree.Parse(line);
                 var binder = new Binder();
                 var boundExpression = binder.Bind(tree.Root);
