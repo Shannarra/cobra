@@ -20,7 +20,7 @@ namespace Cobra
                 if (string.IsNullOrEmpty(line) || line == "exit")
                     return;
 
-                switch (line) //some operation 'commands'
+                switch (line) // some operation 'commands'
                 {
                     case "printToggle":
                         print = !print;
