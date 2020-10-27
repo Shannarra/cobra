@@ -9,4 +9,8 @@
     <None Remove=".gitignore~RF254970df.TMP" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CobraCore\CobraCore.csproj" />
+  </ItemGroup>
+
 </Project>

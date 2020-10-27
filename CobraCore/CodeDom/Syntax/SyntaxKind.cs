@@ -1,4 +1,4 @@
-﻿namespace Cobra.CodeDom.Syntax
+﻿namespace CobraCore.CodeDom.Syntax
 {
     /// <summary>
     /// Represents the kind of any <see cref="SyntaxToken"/>

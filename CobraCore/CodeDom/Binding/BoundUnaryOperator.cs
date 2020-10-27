@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Cobra.CodeDom.Syntax;
+using CobraCore.CodeDom.Syntax;
 
-namespace Cobra.CodeDom.Binding
+namespace CobraCore.CodeDom.Binding
 {
     internal sealed class BoundUnaryOperator
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cobra.CodeDom.Syntax
+namespace CobraCore.CodeDom.Syntax
 {
     /// <summary>
     /// Lex-es all characters into tokens
@@ -16,7 +16,7 @@ namespace Cobra.CodeDom.Syntax
 
         private char nextChar => LookAhead(1);
 
-        private List<string> errors = new List<string>();
+        private DiagnosticContainer diagnostics = new DiagnosticContainer();
 
         public Lexer(string text)
         {
@@ -26,7 +26,7 @@ namespace Cobra.CodeDom.Syntax
         /// <summary>
         /// An error list
         /// </summary>
-        public IEnumerable<string> Errors => errors;
+        public DiagnosticContainer Diagnostics => diagnostics;
 
         /// <summary>
         /// Advances the current <see cref="position"/>
@@ -63,7 +63,7 @@ namespace Cobra.CodeDom.Syntax
                 var newText = text.Substring(start, len);
 
                 if (!int.TryParse(newText, out var val))
-                    errors.Add($"The number {newText} cannot be represented as int");
+                    diagnostics.ReportInvalidNumber(new TextSpan(start, len), newText, typeof(int));
 
                 return new SyntaxToken(SyntaxKind.Number, start, newText, val);
             }
@@ -142,7 +142,7 @@ namespace Cobra.CodeDom.Syntax
                         return new SyntaxToken(SyntaxKind.BooleanNot, position++, "!", null);
             }
 
-            errors.Add($"[ERROR]: Bad character \"{current}\" at {position}");
+            diagnostics.ReportBadChar(position, current);
 
             return new SyntaxToken(SyntaxKind.Error, position++, text.Substring(position - 1, 1), null);
         }

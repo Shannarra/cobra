@@ -1,8 +1,8 @@
 ﻿using System;
-using Cobra.CodeDom.Binding;
-using Cobra.CodeDom.Syntax;
+using System.Collections;
+using CobraCore.CodeDom.Binding;
 
-namespace Cobra.CodeDom
+namespace CobraCore.CodeDom
 {
     /// <summary>
     /// Evaluator for expressions

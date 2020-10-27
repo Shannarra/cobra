@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Cobra.CodeDom;
-using Cobra.CodeDom.Syntax;
-using Cobra.CodeDom.Binding; 
+using CobraCore.CodeDom;
+using CobraCore.CodeDom.Syntax;
+using CobraCore.CodeDom.Binding; 
 
 
 namespace Cobra
@@ -32,10 +32,10 @@ namespace Cobra
                 }
                  
                 var tree = SyntaxTree.Parse(line);
-                var binder = new Binder();
-                var boundExpression = binder.Bind(tree.Root);
+                var compilation = new Compilation(tree);
+                var res = compilation.Evaluate();
 
-                var errList = tree.Errors.Concat(binder.Errors).ToArray();
+                var errList = res.Diagnostics;
 
                 if (print)
                 {
@@ -44,18 +44,16 @@ namespace Cobra
                     Console.ResetColor();
                 }
 
-                if (errList.Any())
+                if (!errList.Any())
+                {
+                    Console.WriteLine(res.Value);                    
+                }
+                else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     foreach (var err in errList)
                         Console.WriteLine(err);
                     Console.ResetColor();
-                }
-                else
-                {
-                    var evaluator = new Evaluator(boundExpression);
-                    var res = evaluator.Evaluate();
-                    Console.WriteLine(res);
                 }
             }
         }

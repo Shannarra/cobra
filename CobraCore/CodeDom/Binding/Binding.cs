@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using Cobra.CodeDom.Syntax;
+using CobraCore.CodeDom.Syntax;
 
-namespace Cobra.CodeDom.Binding
+namespace CobraCore.CodeDom.Binding
 {
     /// <summary>
     /// Walks the syntax tree, implements "type checker"
     /// </summary>
     internal sealed class Binder
     {
-        private List<string> errors = new List<string>();
+        private DiagnosticContainer diagnostics = new DiagnosticContainer();
 
-        public IReadOnlyList<string> Errors => errors;
+        public DiagnosticContainer Diagnostics => diagnostics;
 
         public BoundExpression Bind(Expression expression)
         {
@@ -25,6 +25,8 @@ namespace Cobra.CodeDom.Binding
                     return BindUnaryExpression((UnaryOperationExpressionSyntax) expression);
                 case SyntaxKind.BinaryOperationExpression:
                     return BindBinaryExpression((BinaryOperationExpressionSyntax) expression);
+                case SyntaxKind.ParenthesizedExpression:
+                    return Bind(((ParenthesizedExpression)expression).Expression);                
                 default:
                     throw new Exception($"Unexpected expression {expression.Kind}");
             }
@@ -43,14 +45,12 @@ namespace Cobra.CodeDom.Binding
 
             if (boundOperator == null)
             {
-                errors.Add($"Unary operator {expression.OperatorToken.Text} is not defined for type {boundOperand.Type}");
+                diagnostics.ReportUndefinedUnaryOperator(expression.OperatorToken.Span, expression.OperatorToken.Text, boundOperand.Type);
                 return boundOperand;
             }
 
             return new BoundUnaryExpression(boundOperator, boundOperand);
-        }
-
-        
+        }        
 
         private BoundExpression BindBinaryExpression(BinaryOperationExpressionSyntax expression)
         {
@@ -60,7 +60,7 @@ namespace Cobra.CodeDom.Binding
 
             if (boundOperator == null)
             {
-                errors.Add($"Binary operator {expression.OperatorToken.Text} is not defined for types {boundLeftOperand.Type} and {boundRightOperand.Type}");
+                diagnostics.ReportUndefinedBinaryOperator(expression.OperatorToken.Span, expression.OperatorToken.Text, boundLeftOperand.Type, boundRightOperand.Type);
                 return boundLeftOperand;
             }
 

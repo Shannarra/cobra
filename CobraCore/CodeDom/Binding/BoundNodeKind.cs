@@ -1,4 +1,4 @@
-﻿namespace Cobra.CodeDom.Binding
+﻿namespace CobraCore.CodeDom.Binding
 {
     internal enum BoundNodeKind
     {

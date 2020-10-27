@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Cobra.CodeDom.Syntax
+namespace CobraCore.CodeDom.Syntax
 {
     /// <summary>
     /// Represents the overall structure - the syntax tree of the compiler
     /// </summary>
     public sealed class SyntaxTree
     {
-        public IReadOnlyList<string> Errors { get; }
+        public IReadOnlyList<Diagnostic> Diagnostics { get; }
         public Expression Root { get; }
         public SyntaxToken EofToken { get; }
 
-        public SyntaxTree(IReadOnlyList<string> errors, Expression root, SyntaxToken eofToken)
+        public SyntaxTree(IReadOnlyList<Diagnostic> diagnostics, Expression root, SyntaxToken eofToken)
         {
-            Errors = errors.ToArray();
+            Diagnostics = diagnostics.ToArray();
             Root = root;
             EofToken = eofToken;
         }

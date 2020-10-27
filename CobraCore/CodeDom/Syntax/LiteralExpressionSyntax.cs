@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Cobra.CodeDom.Syntax
+namespace CobraCore.CodeDom.Syntax
 {
     /// <summary>
     /// <inheritdoc cref="Expression"/> providing the syntax for a literal expression

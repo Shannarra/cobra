@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cobra.CodeDom.Binding
+namespace CobraCore.CodeDom.Binding
 {
     internal sealed class BoundBinaryExpression : BoundExpression
     {

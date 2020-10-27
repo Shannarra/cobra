@@ -1,30 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Cobra.CodeDom.Syntax
+namespace CobraCore.CodeDom.Syntax
 {
     /// <summary>
     /// <inheritdoc cref="Expression"/> providing the syntax for a binary expression
     /// </summary>
-    public sealed class UnaryOperationExpressionSyntax : Expression
+    public sealed class BinaryOperationExpressionSyntax : Expression
     {
+        /// <summary>
+        /// The left side of the expression
+        /// </summary>
+        public Expression Left { get; }
+
         /// <summary>
         /// The operator, responsible for the expression
         /// </summary>
         public SyntaxToken OperatorToken { get; }
 
         /// <summary>
-        /// The operand of the operator
+        /// The right side of the expression
         /// </summary>
-        public Expression Operand { get; }
+        public Expression Right { get; }
 
-        public override SyntaxKind Kind => SyntaxKind.UnaryOperationExpression;
+        public override SyntaxKind Kind => SyntaxKind.BinaryOperationExpression;
 
         public override IEnumerable<SyntaxNode> GetChildren()
         {
+            yield return Left;
             yield return OperatorToken;
-            yield return Operand;
+            yield return Right;
         }
 
         /// <summary>
@@ -33,10 +37,11 @@ namespace Cobra.CodeDom.Syntax
         /// <param name="left">Left side of the expression</param>
         /// <param name="operatorToken">The responsible operator</param>
         /// <param name="right">Right side of the expression</param>
-        public UnaryOperationExpressionSyntax(SyntaxToken operatorToken, Expression operand)
+        public BinaryOperationExpressionSyntax(Expression left, SyntaxToken operatorToken, Expression right)
         {
+            Left = left;
             OperatorToken = operatorToken;
-            Operand = operand;
+            Right = right;
         }
     }
 }
