@@ -51,11 +51,11 @@ namespace CobraCore.CodeDom.Syntax
         {
             if (position >= text.Length) 
                 return new SyntaxToken(SyntaxKind.EndOfFile, position, "\0", null);
+            
+            var start = position;
 
             if (char.IsDigit(current)) //deal w/ numbers
             {
-                var start = position;
-
                 while (char.IsDigit(current))
                     Next();
 
@@ -70,8 +70,6 @@ namespace CobraCore.CodeDom.Syntax
 
             if (char.IsLetter(current))
             {
-                var start = position;
-
                 while (char.IsLetter(current))
                     Next();
 
@@ -84,8 +82,6 @@ namespace CobraCore.CodeDom.Syntax
             
             if (char.IsWhiteSpace(current))
             {
-                var start = position;
-
                 while (char.IsWhiteSpace(current))
                     Next();
 
@@ -111,35 +107,62 @@ namespace CobraCore.CodeDom.Syntax
                     return new SyntaxToken(SyntaxKind.ParenthesisClose, position++, ")", null);
                 case '&':
                     if (nextChar == '&')
-                        return new SyntaxToken(SyntaxKind.BooleanAnd, position+=2, "&&", null);
+                    {
+                        position += 2;
+                        return new SyntaxToken(SyntaxKind.BooleanAnd, start, "&&", null);
+                    }
                     break;
                 case '|':
-                    if (nextChar == '|') 
-                        return new SyntaxToken(SyntaxKind.BooleanOr, position+=2, "||", null);
+                    if (nextChar == '|')
+                    {
+                        position += 2;
+                        return new SyntaxToken(SyntaxKind.BooleanOr, start, "||", null);
+                    }
                     break;
                 case 'a':
                     if (nextChar == 'n' && LookAhead(2) == 'd') //and
-                        return new SyntaxToken(SyntaxKind.TextAndKeyword, position += 3, "and", null);
+                    {
+                        position += 3;
+                        return new SyntaxToken(SyntaxKind.TextAndKeyword, start, "and", null);
+                    }
                     break;
                 case 'o':
                     if (nextChar == 'r') //or
-                        return new SyntaxToken(SyntaxKind.TextAndKeyword, position += 2, "or", null);
+                    {
+                        position += 2;
+                        return new SyntaxToken(SyntaxKind.TextAndKeyword, start, "or", null);
+                    }
                     break;
                 case 'i':
                     if (nextChar == 's') // is
-                        return new SyntaxToken(SyntaxKind.IsTextBooleanKeyword, position += 2, "is", null);
+                    {
+                        position += 2;
+                        return new SyntaxToken(SyntaxKind.IsTextBooleanKeyword, start, "is", null);
+                    }
                     break;
                 case '=':
                     if (nextChar == '=')
-                        return new SyntaxToken(SyntaxKind.DoubleEquals, position += 2, "==", null);
+                    {
+                        position += 2;
+                        return new SyntaxToken(SyntaxKind.DoubleEquals, start, "==", null);
+                    }
                     break;
                 case '!':
                     if (nextChar == '=')
-                        return new SyntaxToken(SyntaxKind.NotEquals, position += 2, "!=", null);
+                    {
+                        position += 2;
+                        return new SyntaxToken(SyntaxKind.NotEquals, start, "!=", null);
+                    }
                     else if (nextChar == 'i' && LookAhead(2) == 's')
-                        return new SyntaxToken(SyntaxKind.NegatedIsTextKeyword, position += 3, "!is",null);
-                    else 
-                        return new SyntaxToken(SyntaxKind.BooleanNot, position++, "!", null);
+                    {
+                        position += 3;
+                        return new SyntaxToken(SyntaxKind.NegatedIsTextKeyword, start, "!is", null);
+                    }
+                    else
+                    {
+                        position++;
+                        return new SyntaxToken(SyntaxKind.BooleanNot, start, "!", null);
+                    }
             }
 
             diagnostics.ReportBadChar(position, current);

@@ -14,19 +14,19 @@ namespace Cobra
             var print = false;
             while (true)
             {
-                Console.Write("cobra >");
+                Console.Write("cobra > ");
                 var line = Console.ReadLine();
 
-                if (string.IsNullOrEmpty(line) || line == "exit")
+                if (string.IsNullOrEmpty(line) || line == ".exit")
                     return;
 
                 switch (line) // some operation 'commands'
                 {
-                    case "printToggle":
+                    case ".printToggle":
                         print = !print;
                         Console.WriteLine($"Printing tree now set to {print}.");
                         continue;
-                    case "clear":
+                    case ".clear":
                         Console.Clear();
                         continue;
                 }
@@ -50,10 +50,26 @@ namespace Cobra
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    foreach (var err in errList)
-                        Console.WriteLine(err);
-                    Console.ResetColor();
+                    foreach (var diagnostic in errList)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(diagnostic);
+                        Console.ResetColor();
+
+                        var pre = line.Substring(0, diagnostic.Span.Start);
+                        var err = line.Substring(diagnostic.Span.Start, diagnostic.Span.Length);
+                        var suff = line.Substring(diagnostic.Span.End);
+
+                        Console.Write("    ");
+                        Console.Write(pre);
+
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.Write(err);
+                        Console.ResetColor();
+
+                        Console.Write(suff);
+                        Console.WriteLine();
+                    }
                 }
             }
         }

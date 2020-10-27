@@ -32,9 +32,9 @@ namespace CobraCore.CodeDom
             => Report(span, $"Unexpected token <[{actual}]>, expected <[{expected}]>.");
 
         public void ReportUndefinedUnaryOperator(TextSpan span, string text, Type type)
-            => Report(span, $"Unary operator {text} is not defined for type {type}");
+            => Report(span, $"Unary operator {text} is not defined for type {type}.");
 
         internal void ReportUndefinedBinaryOperator(TextSpan span, string text, Type left, Type right)
-            => Report(span, $"Binary operator {text} is not defined for types {left} and {right}");
+            => Report(span, $"Binary operator {text} is not defined for types {left} and {right}.");
     }
 }
