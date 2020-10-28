@@ -33,11 +33,20 @@ namespace Cobra
                         continue;
 
                     case ".getVars":
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Printing contained variable names:");
-                        foreach (KeyValuePair<string, object> item in variables)
-                            Console.WriteLine($"Key: {item.Key} => Value: {item.Value}");
-                        Console.ResetColor();
+                        if (variables.Any())
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Printing contained variable names:");
+                            foreach (KeyValuePair<string, object> item in variables)
+                                Console.WriteLine($"Variable: {item.Key} => Value: {item.Value}");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray; 
+                            Console.WriteLine("No variables exist yet.");
+                            Console.ResetColor();
+                        }
                         continue;
                 }
                  
