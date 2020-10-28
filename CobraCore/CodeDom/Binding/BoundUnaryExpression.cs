@@ -4,7 +4,7 @@ namespace CobraCore.CodeDom.Binding
 {
     internal sealed class BoundUnaryExpression : BoundExpression
     {
-        public BoundUnaryOperatorKind OperatorKind { get; }
+        public BoundUnaryOperatorKind OperatorKind => Operator.Kind;
         public BoundExpression Operand { get; }
         public override BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
         public BoundUnaryOperator Operator { get; }

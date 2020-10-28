@@ -10,7 +10,7 @@ namespace CobraCore.CodeDom
     /// </summary>
     internal class Evaluator
     {
-        private Dictionary<string, object> variables;
+        private Dictionary<VariableSymbol, object> variables;
 
         /// <summary>
         /// Root expression to evaluate
@@ -22,7 +22,7 @@ namespace CobraCore.CodeDom
             Root = root;
         }
 
-        public Evaluator(BoundExpression root, Dictionary<string, object> variables) : this(root)
+        public Evaluator(BoundExpression root, Dictionary<VariableSymbol, object> variables) : this(root)
         {
             this.variables = variables;
         }
@@ -50,12 +50,12 @@ namespace CobraCore.CodeDom
                     return num.Value;
 
                 case BoundVariableExpression v:
-                    return variables[v.Name];
+                    return variables[v.Variable];
 
                 case BoundAssignmentExpression ass:
                 {
                     var val = EvaluateExpression(ass.Expression);
-                    variables[ass.Name] = val;
+                    variables[ass.Variable] = val;
                     return val;
                 }
                 
@@ -64,8 +64,8 @@ namespace CobraCore.CodeDom
                     var operand = EvaluateExpression(unary.Operand);
                     return unary.OperatorKind switch
                     {
-                        BoundUnaryOperatorKind.Negation => -(int)operand,
                         BoundUnaryOperatorKind.Identity => (int)operand,
+                        BoundUnaryOperatorKind.Negation => -(int)operand,
                         BoundUnaryOperatorKind.LogicalNegation => !(bool)operand,
                         _ => throw new Exception($"Unexpected unary operator [{unary.OperatorKind}]")
                     };

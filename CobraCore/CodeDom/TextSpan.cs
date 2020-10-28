@@ -1,6 +1,6 @@
 ﻿namespace CobraCore.CodeDom
 {
-    public struct TextSpan
+    public readonly struct TextSpan
     {
         public TextSpan(int start, int length)
         {

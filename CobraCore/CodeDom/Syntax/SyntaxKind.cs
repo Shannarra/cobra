@@ -9,6 +9,7 @@
         Number,
         WhiteSpace,
         EqualsToken,
+        BooleanNot,
         Plus,
         Minus,
         Star,
@@ -17,7 +18,6 @@
         ParenthesisClose,
         Error,
         EndOfFile,
-        BooleanNot,
         BooleanAnd,             // &&
         BooleanOr,              // ||
         TextAndKeyword,         // and

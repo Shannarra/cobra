@@ -12,7 +12,7 @@ namespace Cobra
         private static void Main()
         {
 
-            var variables = new Dictionary<string, object>();
+            var variables = new Dictionary<VariableSymbol, object>();
             var print = false;
             while (true)
             {
@@ -37,7 +37,7 @@ namespace Cobra
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("Printing contained variable names:");
-                            foreach (KeyValuePair<string, object> item in variables)
+                            foreach (KeyValuePair<VariableSymbol, object> item in variables)
                                 Console.WriteLine($"Variable: {item.Key} => Value: {item.Value}");
                             Console.ResetColor();
                         }

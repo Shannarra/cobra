@@ -48,19 +48,25 @@ Keep in mind that this is still a _very_ young project, so some of the features 
 3.Operators
     The operators can be C-styled as well as Python-styled 
     ``` 
-    isFinished = true
-    isFinished and true     // true
-    isFinished or true      // true
-    isFinished && true      // true
-    isFinished || true      // true
-    isFinished is true      // true
-    isFinished == true      // true
-    isFinished !is true     // false
-    isFinished != true      // false
-    isFinished is !false    // false
-    isFinished == !false    // false
-    isFinished != !false    // true
-    // and so much more
+    finished = true
+    
+    // unary operators
+    !finished             // false
+    
+    //binary operators
+    finished and true     // true
+    finished or true      // true
+    finished && true      // true
+    finished || true      // true
+    finished is true      // true
+    finished == true      // true
+    finished !is true     // false
+    finished != true      // false
+    finished is !false    // true
+    finished == !false    // true
+    finished != !false    // false
+    finished !is !false   // false
+    // and so much more...
     ```
 
 ### Future features

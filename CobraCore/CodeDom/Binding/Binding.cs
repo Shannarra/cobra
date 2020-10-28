@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using CobraCore.CodeDom.Syntax;
 
@@ -12,9 +13,9 @@ namespace CobraCore.CodeDom.Binding
     internal sealed class Binder
     {
         private readonly DiagnosticContainer diagnostics = new DiagnosticContainer();
-        private readonly Dictionary<string, object> variables;
+        private readonly Dictionary<VariableSymbol, object> variables;
 
-        public Binder(Dictionary<string, object> variables)
+        public Binder(Dictionary<VariableSymbol, object> variables)
         {
             this.variables = variables;
         }
@@ -45,20 +46,31 @@ namespace CobraCore.CodeDom.Binding
         private BoundExpression BindAssingmentExpression(AssignmentExpression expression)
         {
             var boundExpr = Bind(expression.Expression);
-            return new BoundAssignmentExpression(expression.Identifier.Text, boundExpr);
+            string name = expression.Identifier.Text;
+
+            var existing = variables.Keys.FirstOrDefault(x => x.Name == name);
+
+            if (existing != null)
+                variables.Remove(existing);
+            
+            var variable = new VariableSymbol(name, boundExpr.Type);
+            variables[variable] = null;
+
+            return new BoundAssignmentExpression(variable, boundExpr);
         }
 
         private BoundExpression BindNameExpression(NameExpression expression)
         {
-            var name = expression.Identifier.Text; 
-            if (!variables.TryGetValue(name, out var value))
+            var name = expression.Identifier.Text;
+            var variable = variables.Keys.FirstOrDefault(x => x.Name == name);
+
+            if (variable == null)
             {
                 diagnostics.ReportUndefinedName(expression.Identifier.Span, name);
                 return new BoundLiteralExpression(0);
             }
 
-            var type = value?.GetType()?? typeof(object);
-            return new BoundVariableExpression(name, type);
+            return new BoundVariableExpression(variable);
         }
 
         private BoundExpression BindParenthesizedExpression(ParenthesizedExpression expression)
