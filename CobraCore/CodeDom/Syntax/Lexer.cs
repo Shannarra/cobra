@@ -77,7 +77,7 @@ namespace CobraCore.CodeDom.Syntax
                 var newText = text.Substring(start, len);
                 var kind = SyntaxRules.GetKeyWordKind(newText);
 
-                return new SyntaxToken(kind, start, text, null);
+                return new SyntaxToken(kind, start, newText, null);
             }
             
             if (char.IsWhiteSpace(current))
@@ -146,7 +146,11 @@ namespace CobraCore.CodeDom.Syntax
                         position += 2;
                         return new SyntaxToken(SyntaxKind.DoubleEquals, start, "==", null);
                     }
-                    break;
+                    else
+                    {
+                        position++;
+                        return new SyntaxToken(SyntaxKind.EqualsToken, start, "=", null);
+                    }
                 case '!':
                     if (nextChar == '=')
                     {

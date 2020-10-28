@@ -101,7 +101,26 @@ namespace CobraCore.CodeDom.Syntax
             return new SyntaxTree(Diagnostics.ToArray(), exp, eofToken);
         }
 
-        private Expression ParseExpression(int priority = 0)
+        private Expression ParseExpression()
+        {
+            return ParseAssignmentExpression();
+        }
+
+        private Expression ParseAssignmentExpression()
+        {
+
+            if (LookAhead(0).Kind == SyntaxKind.Identifier &&
+                LookAhead(1).Kind == SyntaxKind.EqualsToken)
+            {
+                var identifier = NextToken();
+                var operatorToken = NextToken();
+                var right = ParseAssignmentExpression();
+                return new AssignmentExpression(identifier, operatorToken, right);
+            }
+            return ParseBinaryExpression();
+        }
+
+        private Expression ParseBinaryExpression(int priority = 0)
         {
             Expression left;
 
@@ -111,7 +130,7 @@ namespace CobraCore.CodeDom.Syntax
             {
                 var operatorToken = NextToken();
                 
-                var operand = ParseExpression(unaryPresent);
+                var operand = ParseBinaryExpression(unaryPresent);
                 left = new UnaryOperationExpressionSyntax(operatorToken, operand);
             }
             else
@@ -124,7 +143,7 @@ namespace CobraCore.CodeDom.Syntax
                     break;
 
                 var operatorToken = NextToken();
-                var right = ParseExpression(present);
+                var right = ParseBinaryExpression(present);
                 left = new BinaryOperationExpressionSyntax(left, operatorToken, right);
             }
 
@@ -152,6 +171,11 @@ namespace CobraCore.CodeDom.Syntax
                     var keyword = NextToken(); // ALWAYS CONSUME TOKENS!
                     var value = keyword.Kind == SyntaxKind.TrueKeyword;
                     return new LiteralExpressionSyntax(keyword, value);
+                }
+                case SyntaxKind.Identifier:
+                {
+                    var ident = NextToken();
+                    return new NameExpression(ident);
                 }
                 default:
                 {

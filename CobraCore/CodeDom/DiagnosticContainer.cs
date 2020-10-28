@@ -36,5 +36,8 @@ namespace CobraCore.CodeDom
 
         internal void ReportUndefinedBinaryOperator(TextSpan span, string text, Type left, Type right)
             => Report(span, $"Binary operator {text} is not defined for types {left} and {right}.");
+
+        internal void ReportUndefinedName(TextSpan span, string name)
+            => Report(span, $"Unidentified variable name \"{name}\".");
     }
 }

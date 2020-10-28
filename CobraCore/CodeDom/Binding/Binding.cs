@@ -11,7 +11,13 @@ namespace CobraCore.CodeDom.Binding
     /// </summary>
     internal sealed class Binder
     {
-        private DiagnosticContainer diagnostics = new DiagnosticContainer();
+        private readonly DiagnosticContainer diagnostics = new DiagnosticContainer();
+        private readonly Dictionary<string, object> variables;
+
+        public Binder(Dictionary<string, object> variables)
+        {
+            this.variables = variables;
+        }
 
         public DiagnosticContainer Diagnostics => diagnostics;
 
@@ -19,18 +25,44 @@ namespace CobraCore.CodeDom.Binding
         {
             switch (expression.Kind)
             {
+                case SyntaxKind.ParenthesizedExpression:
+                    return BindParenthesizedExpression(((ParenthesizedExpression)expression));
                 case SyntaxKind.LiteralExpression:
                     return BindLiteralExpression((LiteralExpressionSyntax) expression);
+                case SyntaxKind.NameExpression:
+                    return BindNameExpression((NameExpression)expression);
+                case SyntaxKind.AssignmentExpression:
+                    return BindAssingmentExpression((AssignmentExpression)expression);
                 case SyntaxKind.UnaryOperationExpression:
                     return BindUnaryExpression((UnaryOperationExpressionSyntax) expression);
                 case SyntaxKind.BinaryOperationExpression:
                     return BindBinaryExpression((BinaryOperationExpressionSyntax) expression);
-                case SyntaxKind.ParenthesizedExpression:
-                    return Bind(((ParenthesizedExpression)expression).Expression);                
                 default:
                     throw new Exception($"Unexpected expression {expression.Kind}");
             }
         }
+
+        private BoundExpression BindAssingmentExpression(AssignmentExpression expression)
+        {
+            var boundExpr = Bind(expression.Expression);
+            return new BoundAssignmentExpression(expression.Identifier.Text, boundExpr);
+        }
+
+        private BoundExpression BindNameExpression(NameExpression expression)
+        {
+            var name = expression.Identifier.Text; 
+            if (!variables.TryGetValue(name, out var value))
+            {
+                diagnostics.ReportUndefinedName(expression.Identifier.Span, name);
+                return new BoundLiteralExpression(0);
+            }
+
+            var type = value?.GetType()?? typeof(object);
+            return new BoundVariableExpression(name, type);
+        }
+
+        private BoundExpression BindParenthesizedExpression(ParenthesizedExpression expression)
+            => Bind(expression.Expression);
 
         private BoundExpression BindLiteralExpression(LiteralExpressionSyntax expression)
         {

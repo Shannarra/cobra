@@ -8,6 +8,7 @@
         // Primitive syntax
         Number,
         WhiteSpace,
+        EqualsToken,
         Plus,
         Minus,
         Star,
@@ -29,6 +30,7 @@
         BinaryOperationExpression,
         ParenthesizedExpression,
         UnaryOperationExpression,
+        NameExpression,
 
         // keywords
         FalseKeyword,
@@ -38,8 +40,6 @@
 
         NotEquals,
         DoubleEquals,
-
-
-        
+        AssignmentExpression,
     }
 }

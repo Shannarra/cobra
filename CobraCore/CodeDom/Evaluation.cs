@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using CobraCore.CodeDom.Binding;
 
 namespace CobraCore.CodeDom
@@ -9,6 +10,8 @@ namespace CobraCore.CodeDom
     /// </summary>
     internal class Evaluator
     {
+        private Dictionary<string, object> variables;
+
         /// <summary>
         /// Root expression to evaluate
         /// </summary>
@@ -17,6 +20,11 @@ namespace CobraCore.CodeDom
         public Evaluator(BoundExpression root)
         {
             Root = root;
+        }
+
+        public Evaluator(BoundExpression root, Dictionary<string, object> variables) : this(root)
+        {
+            this.variables = variables;
         }
 
         /// <summary>
@@ -37,6 +45,31 @@ namespace CobraCore.CodeDom
         {
             switch (root)
             {
+                // number expression
+                case BoundLiteralExpression num:
+                    return num.Value;
+
+                case BoundVariableExpression v:
+                    return variables[v.Name];
+
+                case BoundAssignmentExpression ass:
+                {
+                    var val = EvaluateExpression(ass.Expression);
+                    variables[ass.Name] = val;
+                    return val;
+                }
+                
+                case BoundUnaryExpression unary:
+                {
+                    var operand = EvaluateExpression(unary.Operand);
+                    return unary.OperatorKind switch
+                    {
+                        BoundUnaryOperatorKind.Negation => -(int)operand,
+                        BoundUnaryOperatorKind.Identity => (int)operand,
+                        BoundUnaryOperatorKind.LogicalNegation => !(bool)operand,
+                        _ => throw new Exception($"Unexpected unary operator [{unary.OperatorKind}]")
+                    };
+                }
                 // binary expression
                 case BoundBinaryExpression bin:
                 {
@@ -56,21 +89,6 @@ namespace CobraCore.CodeDom
                         _ => throw new Exception($"Unexpected operator {bin.Operator.Kind}")
                     };
                 }
-                case BoundUnaryExpression unary:
-                {
-                    var operand = EvaluateExpression(unary.Operand);
-                    return unary.OperatorKind switch
-                    {
-                        BoundUnaryOperatorKind.Negation => -(int)operand,
-                        BoundUnaryOperatorKind.Identity => (int)operand,
-                        BoundUnaryOperatorKind.LogicalNegation => !(bool)operand,
-                        _ => throw new Exception($"Unexpected unary operator [{unary.OperatorKind}]")
-                    };
-                }
-                // number expression
-                case BoundLiteralExpression num:
-                    return num.Value;
-                // parenthesis
 
                 default:
                     throw new Exception($"Unexpected node {root.Kind}");

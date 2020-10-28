@@ -2,8 +2,8 @@
 using System.Linq;
 using CobraCore.CodeDom;
 using CobraCore.CodeDom.Syntax;
-using CobraCore.CodeDom.Binding; 
-
+using CobraCore.CodeDom.Binding;
+using System.Collections.Generic;
 
 namespace Cobra
 {
@@ -11,6 +11,8 @@ namespace Cobra
     {
         private static void Main()
         {
+
+            var variables = new Dictionary<string, object>();
             var print = false;
             while (true)
             {
@@ -29,11 +31,19 @@ namespace Cobra
                     case ".clear":
                         Console.Clear();
                         continue;
+
+                    case ".getVars":
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Printing contained variable names:");
+                        foreach (KeyValuePair<string, object> item in variables)
+                            Console.WriteLine($"Key: {item.Key} => Value: {item.Value}");
+                        Console.ResetColor();
+                        continue;
                 }
                  
                 var tree = SyntaxTree.Parse(line);
                 var compilation = new Compilation(tree);
-                var res = compilation.Evaluate();
+                var res = compilation.Evaluate(variables);
 
                 var errList = res.Diagnostics;
 
@@ -55,9 +65,9 @@ namespace Cobra
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(diagnostic);
                         Console.ResetColor();
-
+                        
                         var pre = line.Substring(0, diagnostic.Span.Start);
-                        var err = line.Substring(diagnostic.Span.Start, diagnostic.Span.Length);
+                        var err = (line[diagnostic.Span.Start..(diagnostic.Span.End)]);
                         var suff = line.Substring(diagnostic.Span.End);
 
                         Console.Write("    ");
