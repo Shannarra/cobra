@@ -44,7 +44,7 @@ Keep in mind that this is still a _very_ young project, so some of the features 
     d - (c * b - a) //2260
     d && b // Binary operator && is not defined for types System.Int32 and System.Int32.
     ```
-    ![Bin](https://github.com/Shannarra/Cobra/blob/master/docs/bin_operator_err.png?raw=true)  
+    ![Bin](https://github.com/Shannarra/Cobra/blob/master/docs/bin_operator_error.png?raw=true)  
 3.Operators
     The operators can be C-styled as well as Python-styled 
     ``` 
