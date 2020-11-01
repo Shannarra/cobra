@@ -26,6 +26,20 @@ Keep in mind that this is still a _very_ young project, so some of the features 
         Operators
         <p>The operators in the language are <strong>strict</strong>, and <strong>left-biased</strong>. The only exception to that rule is the assignment operator (=), which binds to the right side of the expression.</p>
     </li>
+    <li>
+        Compiler commands
+        <ul>
+            <li>.printToggle
+               <p>Prints the current AST to the console in the style of the <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/tree">windows "tree" command</a></p>
+            </li>
+            <li> .exit, .clear
+                <p>Clears or exits the current compiler iteration.</p>
+            </li>
+            <li> .getVars
+                <p>Prints the currently instantiated variables as key-value pairs.</p>
+            </li>
+        </ul>
+    </li>
 </ol>
 
 ### Examples
