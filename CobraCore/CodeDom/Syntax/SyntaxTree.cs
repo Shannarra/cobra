@@ -26,5 +26,21 @@ namespace CobraCore.CodeDom.Syntax
         /// <returns></returns>
         public static SyntaxTree Parse(string text)
             => new Parser(text).Parse();
+        
+        
+        public static IEnumerable<SyntaxToken> ParseTokens(string text)
+        {
+            var lexer = new Lexer(text);
+
+            while (true)
+            {
+                var token = lexer.Lex();
+                if (token.Kind == SyntaxKind.EndOfFile)
+                    break;
+                yield return token;
+            }
+        }
+
+
     }
 }

@@ -10,8 +10,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  buildConfigurations: 'Release'
+  buildConfiguration: 'Release'
+  tests: './Cobra.Tests/Cobra.Tests.csproj'
 
 steps:
-- script: dotnet build --configuration Debug
-  displayName: 'dotnet build Debug'
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+- script: dotnet test $(tests)
+  displayName 'dotnet test'
