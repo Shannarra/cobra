@@ -73,5 +73,52 @@ namespace CobraCore.CodeDom.Syntax
                     return SyntaxKind.Identifier;
             }
         }
+
+        public static string GetText(SyntaxKind kind)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.WhiteSpace:
+                    return " ";
+                case SyntaxKind.EqualsToken:
+                    return "=";
+                case SyntaxKind.BooleanNot:
+                    return "!";
+                case SyntaxKind.Plus:
+                    return "+";
+                case SyntaxKind.Minus:
+                    return "-";
+                case SyntaxKind.Star:
+                    return "*";
+                case SyntaxKind.Slash:
+                    return "/";
+                case SyntaxKind.ParenthesisOpen:
+                    return "(";
+                case SyntaxKind.ParenthesisClose:
+                    return ")";
+                case SyntaxKind.BooleanAnd:
+                    return "&&";
+                case SyntaxKind.BooleanOr:
+                    return "||";
+                case SyntaxKind.TextAndKeyword:
+                    return "and";
+                case SyntaxKind.TextOrKeyword:
+                    return "or";
+                case SyntaxKind.IsTextBooleanKeyword:
+                    return "is";
+                case SyntaxKind.NegatedIsTextKeyword:
+                    return "!is";
+                case SyntaxKind.FalseKeyword:
+                    return "false";
+                case SyntaxKind.TrueKeyword:
+                    return "true";
+                case SyntaxKind.NotEquals:
+                    return "!=";
+                case SyntaxKind.DoubleEquals:
+                    return "==";
+                default:
+                    return null;
+            }
+        }
     }
 }

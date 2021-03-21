@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Cobra\Cobra.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CodeDom\Binding\" />
+  </ItemGroup>
+
 </Project>
